@@ -38,7 +38,8 @@
                     android:background="@color/whiteX"
                     android:contentDescription="x"
                     android:padding="5dp"
-                    android:src="@drawable/ic_profile" />
+                    android:src="@drawable/ic_profile"
+                    />
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout

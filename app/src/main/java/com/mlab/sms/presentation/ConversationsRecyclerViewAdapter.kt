@@ -14,17 +14,14 @@ import com.mlab.sms.util.toDateTime
 class ConversationsRecyclerViewAdapter(
     private val convList: List<Pair<String, List<Msg>>>,
     private val manager: FragmentManager,
-    private val firstFragment: FirstFragment,
-    private val viewModel: MainViewModel
+    private val firstFragment: FirstFragment
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ViewHolderAdmin(
         private val binding: ItemConversationBinding,
         private val contest: Context,
         private val manager: FragmentManager,
-        private val firstFragment: FirstFragment,
-        private val viewModel: MainViewModel
-
+        private val firstFragment: FirstFragment
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(list: List<Pair<String,List<Msg>>>, position: Int) {
             binding.phoneNo.text = list[position].first
@@ -41,9 +38,6 @@ class ConversationsRecyclerViewAdapter(
                         add(R.id.convList, SecondFragment.newInstance(list[position].first))
                         commit()
                     }
-                //reading all sms again so that we don't miss any sms
-                viewModel.readAllSMS(contest.contentResolver)
-
             }
         }
     }
@@ -52,7 +46,7 @@ class ConversationsRecyclerViewAdapter(
         ViewHolderAdmin(
             ItemConversationBinding.inflate(
                 LayoutInflater.from(viewGroup.context),
-                viewGroup, false), viewGroup.context, manager , firstFragment, viewModel
+                viewGroup, false), viewGroup.context, manager , firstFragment
         )
 
     override fun getItemCount() = convList.size

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        app:cardBackgroundColor="#ABEED9"
+        app:cardBackgroundColor="@color/tiaZ"
         app:strokeWidth="0dp">
 
         <TextView

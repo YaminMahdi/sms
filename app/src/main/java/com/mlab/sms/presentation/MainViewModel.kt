@@ -25,14 +25,27 @@ class MainViewModel : ViewModel(){
         //working on Input Output thread for better performance
         viewModelScope.launch(Dispatchers.IO){
             val tmpConv = _smsList.value ?: mutableListOf()
+
+            //adding same contract with country code and without country code in a single conversation
+            var fixDuplicate = false
+            tmpConv.map { it.first }.forEachIndexed { ind,pn->
+                if((pn.slice(4..< pn.length) == sms.phone) ||
+                    (pn.slice(3..< pn.length) == sms.phone) ||
+                    (pn.slice(2..< pn.length) == sms.phone)
+                ){
+                    tmpConv[ind].second.add(sms)
+                    fixDuplicate = true
+                }
+            }
+
             //adding sms to old conversation if exist
             if(tmpConv.map { it.first }.contains(sms.phone)){
                 val ind = tmpConv.map { it.first }.indexOf(sms.phone)
                 tmpConv[ind].second.add(sms)
             }
             //creating new conversation
-            else{
-                tmpConv.add(Pair(sms.phone, mutableListOf(sms)))
+            else if(!fixDuplicate){
+                tmpConv.add(0,Pair(sms.phone, mutableListOf(sms)))
             }
             withContext(Dispatchers.Main){
 //                savedStateHandle["smsList"]= tmpConv
@@ -81,12 +94,26 @@ class MainViewModel : ViewModel(){
             cursor.close()
             //building conversation
             //separate list for every phone number
+
             totalMsgList.forEach {msg->
+
+                //adding same contract with country code and without country code in a single conversation
+                var fixDuplicate = false
+                conversations.map { it.first }.forEachIndexed { ind,pn->
+                    if((pn.slice(4..< pn.length) == msg.phone) ||
+                        (pn.slice(3..< pn.length) == msg.phone) ||
+                        (pn.slice(2..< pn.length) == msg.phone)
+                    ){
+                        conversations[ind].second.add(msg)
+                        fixDuplicate = true
+                    }
+                }
+
                 if(conversations.map { it.first }.contains(msg.phone)){
                     val ind = conversations.map { it.first }.indexOf(msg.phone)
                     conversations[ind].second.add(msg)
                 }
-                else{
+                else if(!fixDuplicate){
                     conversations.add(Pair(msg.phone, mutableListOf(msg)))
                 }
             }

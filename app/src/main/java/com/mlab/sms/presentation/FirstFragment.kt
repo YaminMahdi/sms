@@ -6,17 +6,19 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.provider.Telephony
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.RECEIVER_EXPORTED
 import androidx.core.content.ContextCompat.registerReceiver
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.mlab.sms.MsgReceiver
-import com.mlab.sms.model.Msg
 import com.mlab.sms.databinding.FragmentFirstBinding
+import com.mlab.sms.model.Msg
+
 
 class FirstFragment : Fragment() {
 
@@ -25,6 +27,11 @@ class FirstFragment : Fragment() {
     private val viewModel by activityViewModels<MainViewModel>()
 
     private val binding get() = _binding!!
+
+    companion object{
+        private var lastFirstVisiblePosition = 0
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +50,7 @@ class FirstFragment : Fragment() {
         viewModel.smsList.observe(viewLifecycleOwner){
             //building conversations with RecyclerView
             binding.convRecyclerView.adapter =
-                ConversationsRecyclerViewAdapter(it,requireActivity().supportFragmentManager,this,viewModel)
+                ConversationsRecyclerViewAdapter(it,requireActivity().supportFragmentManager,this)
         }
 
         //looking incomplete, so..
