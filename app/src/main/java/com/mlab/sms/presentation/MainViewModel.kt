@@ -47,6 +47,9 @@ class MainViewModel : ViewModel(){
             else if(!fixDuplicate){
                 tmpConv.add(0,Pair(sms.phone, mutableListOf(sms)))
             }
+            //sorting is needed so that new sms comes in top
+            tmpConv.sortByDescending { it.second.last().time }
+
             withContext(Dispatchers.Main){
 //                savedStateHandle["smsList"]= tmpConv
                 _smsList.value = tmpConv
